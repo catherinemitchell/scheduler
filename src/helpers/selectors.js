@@ -19,4 +19,36 @@ export function getAppointmentsForDay(state, day) {
   return foundAppointment
   })
   return result 
+};
+
+export function getInterview(state, originalInterview) {
+  //return a new object containing the interview data when we pass it an object that conatins the interviewer
+  //otherwise it should return null
+
+  //return null if no interview is booked
+  if (!originalInterview) {
+    return null
+  }
+
+  //return null if no interviewer object passed
+  const interviewerObject = state.interviewers[originalInterview.interviewer]
+  console.log(interviewerObject)
+  if (!interviewerObject) {
+    return null
+  }
+
+return {...originalInterview, interviewer: interviewerObject}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
