@@ -7,6 +7,7 @@ import selectors from "helpers/selectors.js";
 import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 
 
+
 // const appointments = {
 //   "1": {
 //     id: 1,
@@ -56,25 +57,12 @@ export default function Application(props) {
 
 
   const setDay = day => setState(prev => ({ ...prev, day }));
-  // const setDays = days => setState(prev => ({...prev, days }));
 
-
-
-  // useEffect(() => {
-  //   const URL = `/api/days`;
-  //   axios.get(URL)
-  //   .then((res) )=> /*{setDays(res.data)})*/
-  // }, [])
-
-  useEffect(() => {
+    useEffect(() => {
     Promise.all([
       axios.get(`http://localhost:8001/api/days`),
       axios.get(`http://localhost:8001/api/appointments`),
       axios.get(`http://localhost:8001/api/interviewers`)
-      //   ]).then(([days, appointments]) => {
-      //     setState(prev => ({...prev, days: days.data, appointments: appointments.data}))
-      //   });
-      // }, []);
     ]).then(all => {
       const [days, appointments, interviewers] = all.map(res => res.data);
       console.log(days)
