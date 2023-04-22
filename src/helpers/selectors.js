@@ -6,6 +6,25 @@ export function getAppointmentsForDay(state, day) {
   //forEach apointment id, get the appointment that matches that id
   //add that appointment to our list 
   //return the list
+  if (state.days.length === 0) {
+    return [];
+  }
+  const dayObj = state.days.find(d => d.name === day);
+  console.log("************", dayObj);
+  if (!dayObj) {
+    return [];
+  }
+  let array = dayObj.appointments.map((id) => {
+    return state.appointments[id];
+  });
+  // for (const id of dayObj.interviewers ) {
+  //   const interviewer = state.interviewers[id]
+
+  //   array.push[interviewer]
+  // }
+  console.log("--------", array);
+  return array;
+}
 
 //   let array = [];
 
@@ -20,50 +39,48 @@ export function getAppointmentsForDay(state, day) {
 //     array.push[appointment]
 //   }
 
-  
+
 //   return array
 // }
-  
-  const hasDays = Boolean(state.days.length)
-  if (!hasDays) {
-    return []
-  }
-  let foundDay;
-  for (const dayObj of state.days) {
-    if (dayObj.name === day) {
-      foundDay = dayObj
-    }
-  } 
-  if (!foundDay) {
-    return []
-  }
 
-  const result = foundDay.appointments.map((appointmentId) => {
-   const foundAppointment = Object.values(state.appointments).find(({ id }) => id === appointmentId)
-  return foundAppointment
-  })
-  return result 
-};
+//   const hasDays = Boolean(state.days.length)
+//   if (!hasDays) {
+//     return []
+//   }
+//   let foundDay;
+//   for (const dayObj of state.days) {
+//     if (dayObj.name === day) {
+//       foundDay = dayObj
+//     }
+//   } 
+//   if (!foundDay) {
+//     return []
+//   }
+
+//   const result = foundDay.appointments.map((appointmentId) => {
+//    const foundAppointment = Object.values(state.appointments).find(({ id }) => id === appointmentId)
+//   return foundAppointment
+//   })
+//   return result 
+// };
 
 export function getInterview(state, originalInterview) {
   //return a new object containing the interview data when we pass it an object that conatins the interviewer
   //otherwise it should return null
-
   //return null if no interview is booked
   if (!originalInterview) {
-    return null
+    return null;
   }
-
   //return null if no interviewer object passed
-  const interviewerObject = state.interviewers[originalInterview.interviewer]
-  console.log(interviewerObject)
+  const interviewerObject = state.interviewers[originalInterview.interviewer];
+  console.log(interviewerObject);
   if (!interviewerObject) {
-    return null
+    return null;
   }
-
-return {...originalInterview, interviewer: interviewerObject}
-
+  return { ...originalInterview, interviewer: interviewerObject };
 }
+
+
 
 export function getInterviewersForDay(state, day) {
   //- need an empty list to begin with
@@ -74,38 +91,47 @@ export function getInterviewersForDay(state, day) {
   //add that appointment to our list 
   //return the list
 
-//   let array = [];
+  // let array = [];
+  if (state.days.length === 0) {
+    return [];
+  }
+  const dayObj = state.days.find(d => d.name === day);
+  console.log("************", dayObj);
+  if (!dayObj) {
+    return [];
+  }
+  let array = dayObj.interviewers.map((id) => {
+    return state.interviewers[id];
+  });
+  // for (const id of dayObj.interviewers ) {
+  //   const interviewer = state.interviewers[id]
 
-//   const dayObj = state.days.find(d => d.name === day)
+  //   array.push[interviewer]
+  // }
+  console.log("--------", array);
+  return array;
+}
 
-//   for (const id of dayObj.interviewers ) {
-//     const interviewer = state.interviewers[id]
-
-//     array.push[interviewer]
+// const hasInterviewers = Boolean(state.days.length)
+// if (!hasInterviewers) {
+//   return []
+// }
+// let foundDay;
+// for (const dayObj of state.days) {
+//   if (dayObj.name === day) {
+//     foundDay = dayObj
 //   }
-//   return array
+// } 
+// if (!foundDay) {
+//   return []
 // }
 
-const hasInterviewers = Boolean(state.days.length)
-if (!hasInterviewers) {
-  return []
-}
-let foundDay;
-for (const dayObj of state.days) {
-  if (dayObj.name === day) {
-    foundDay = dayObj
-  }
-} 
-if (!foundDay) {
-  return []
-}
-
-const result = foundDay.appointments.map((interviewersId) => {
- const foundInterviewer = Object.values(state.appointments).find(({ id }) => id === interviewersId)
-return foundInterviewer
-})
-return result 
-};
+// const result = foundDay.appointments.map((interviewersId) => {
+//  const foundInterviewer = Object.values(state.appointments).find(({ id }) => id === interviewersId)
+// return foundInterviewer
+// })
+// return result 
+// };
 
 
 
