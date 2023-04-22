@@ -75,6 +75,7 @@ export default function Application(props) {
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);
+  console.log("INTERVIEWERS ARRAY", interviewers)
   
 
   return (
@@ -110,7 +111,6 @@ export default function Application(props) {
           />)
         })}
         <Appointment key="last" time="5pm" />
-        
       </section>
     </main>
   );
