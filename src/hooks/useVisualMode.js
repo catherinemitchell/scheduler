@@ -5,14 +5,22 @@ export function useVisualMode(initial) {
   const [history, setHistory] = useState([initial]);
 
   //add the new mode to our history
-  function transition(updatedMode, shouldReplacePreviousMode) {
-    if (!shouldReplacePreviousMode) {
-      setHistory(prevHistory => [...prevHistory, updatedMode]);
-    } else {
-      setHistory(prevHistory => [...prevHistory.slice(0, -1), updatedMode])
-    }
+  function transition(updatedMode, replace) {
+
+    setHistory(prev => {
+      const newHistory = [...prev];
+
+      if (replace) {
+        newHistory.pop();
+      }
+
+      newHistory.push(updatedMode);
+      return newHistory;
+    });
+
+
     setMode(updatedMode);
-    
+
   }
 
   //set the mode to the previous item in our history array
@@ -21,15 +29,15 @@ export function useVisualMode(initial) {
     //check if history array is greater than 1
     if (history.length > 1) {
       //remove the last item
-      const copyArray = [...history]
+      const newHistory = [...history];
       //removing the last mode
-      copyArray.pop()
+      newHistory.pop();
       //get the latest of the array after the last mode was popped off
-      const updatedMode = copyArray[copyArray.length - 1];
+      const updatedMode = newHistory[newHistory.length - 1];
       //setMode with the new mode
       setMode(updatedMode);
       //also have to set the history
-      setHistory(copyArray)
+      setHistory(newHistory);
     }
   }
 
