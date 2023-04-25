@@ -18,7 +18,7 @@ export function useApplicationData() {
     interviewers: {}
   });
 
-const setDay = day => setState(prev => ({ ...prev, day }));
+  const setDay = day => setState(prev => ({ ...prev, day }));
 
   useEffect(() => {
     Promise.all([
@@ -35,30 +35,36 @@ const setDay = day => setState(prev => ({ ...prev, day }));
     });
   }, []);
 
-   //iterate over the days
-    //figure out which day this appointment is for
-    //go into the appointments for that day
-    //figure out which ones have an interview of null
-    //set spots to the length of null interviews
-    //put code in another function to keep it dry so can use it in cancelInterview
-    function getSpots(appointments) {
-      //iterate over the days in the state
-      //return the day
-      const day = state.days.find((day) => {
-        if (day.name === state.day)
-        return day
-      });
-      //filtering through the appointments ids that came back from find.
-      //because state object hasn't been updated yet, 
-      //need to use the new apointments object created in bookInterview and canInterview
-      const spots = day.appointments.filter((aptID) => {
-        //checking if the given appointments interview is null
-       return appointments[aptID].interview === null
-       //filter returns an array, in this case an array of null interviews. 
-       //want to know how many elements are in that array, so use .length
-      }).length
-      return spots 
-    }
+  //iterate over the days
+  //figure out which day this appointment is for
+  //go into the appointments for that day
+  //figure out which ones have an interview of null
+  //set spots to the length of null interviews
+  //put code in another function to keep it dry so can use it in cancelInterview
+  function getSpots(appointments, state) {
+    //iterate over the days in the state
+    //return the day
+    const day = state.days.find((day) => {
+      if (day.name === state.day)
+        return day;
+    });
+    //filtering through the appointments ids that came back from find.
+    //because state object hasn't been updated yet, 
+    //need to use the new apointments object created in bookInterview and canInterview
+    const spots = day.appointments.filter((aptID) => {
+      //checking if the given appointments interview is null
+      return appointments[aptID].interview === null;
+      //filter returns an array, in this case an array of null interviews. 
+      //want to know how many elements are in that array, so use .length
+    }).length;
+    const newDays = state.days.map(day => {
+      if (day.name === state.day) {
+        return { ...day, spots: spots };
+      }
+      return day;
+    });
+    return newDays;
+  }
 
 
 
@@ -75,19 +81,14 @@ const setDay = day => setState(prev => ({ ...prev, day }));
       [id]: appointment
     };
     //getSpots from updated appointments
-    const newSpots = getSpots(appointments)
-    const newDays = state.days.map(day => {   
-      if (day.name === state.day) {
-      return { ...day, spots: newSpots };
-      }
-      return day;
-      });
-      console.log("updated appointments:", appointments);
-      console.log("updated days:", newDays);
+    const newDays = getSpots(appointments, state);
+   
+    console.log("updated appointments:", appointments);
+    console.log("updated days:", newDays);
     return axios.put(`/api/appointments/${id}`, { interview })
-      .then(() => { 
+      .then(() => {
         setState(prevState => ({ ...prevState, days: newDays, appointments })); //updating state with the new appointments objects
-        console.log("*****", state)
+        console.log("*****", state);
       })
       .catch(error => {
         console.log("error updating appointment:", error);
@@ -104,19 +105,14 @@ const setDay = day => setState(prev => ({ ...prev, day }));
       ...state.appointments,
       [id]: appointment
     };
-    const newSpots = getSpots(appointments)
-    const newDays = state.days.map(day => {
-      if (day.name === state.day) {
-      return { ...day, spots: newSpots };
-      }
-      return day;
-      });
+    const newDays = getSpots(appointments, state);
+
     return axios.delete(`/api/appointments/${id}`)
       .then(() => {
         setState(prevState => ({ ...prevState, days: newDays, appointments }));
       });
   }
 
-return {state, setDay, bookInterview, cancelInterview}
+  return { state, setDay, bookInterview, cancelInterview };
 
 }
