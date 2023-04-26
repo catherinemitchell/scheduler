@@ -4,7 +4,6 @@ export function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
 
-  //add the new mode to our history
   function transition(updatedMode, replace) {
 
     setHistory(prev => {
@@ -13,15 +12,11 @@ export function useVisualMode(initial) {
       if (replace) {
         newHistory.pop();
       }
-
       newHistory.push(updatedMode);
       return newHistory;
     });
-
-
     setMode(updatedMode);
-
-  }
+  };
 
   //set the mode to the previous item in our history array
   //not allow the user to go back past the inital mode - history array will need to have length that is > 1
@@ -40,9 +35,5 @@ export function useVisualMode(initial) {
       setHistory(newHistory);
     }
   }
-
-  // useEffect(() => {console.log(history)}, [history])
-
   return { mode, transition, back };
-
-}
+};

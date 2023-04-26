@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-//appointment id is known when an interview is confirmed or canceled by the server
-//number of spots is inside each day object
-//number of spots is the number of appointments that are null
-//should update the spots when we book or cancel an interview - but have to update the state
-//with the new number of spots when the update is confirmed on the server side.  
-//so it should be done in the bookInterview and cancelInterview functions and applied in the .then part of the AJAX request
-//if the number of spots is null then a spot is free
-//
-
 export function useApplicationData() {
   const [state, setState] = useState({
     day: "Monday",
@@ -27,20 +18,11 @@ export function useApplicationData() {
       axios.get(`/api/interviewers`)
     ]).then(all => {
       const [days, appointments, interviewers] = all.map(res => res.data);
-      console.log(days);
-      console.log(appointments);
-      console.log(interviewers);
-      console.log(all);
       setState(prev => ({ ...prev, days, appointments, interviewers }));
     });
   }, []);
 
-  //iterate over the days
-  //figure out which day this appointment is for
-  //go into the appointments for that day
-  //figure out which ones have an interview of null
-  //set spots to the length of null interviews
-  //put code in another function to keep it dry so can use it in cancelInterview
+
   function getSpots(appointments, state) {
     //iterate over the days in the state
     //return the day
@@ -64,34 +46,27 @@ export function useApplicationData() {
       return day;
     });
     return newDays;
-  }
-
+  };
 
 
   function bookInterview(id, interview) {
-    console.log("bookInterview called with id:", id, "and interview:", interview);
-    console.log(id, interview);
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
     };
-    console.log("appointment with new interview:", appointment);
+
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
     //getSpots from updated appointments
     const newDays = getSpots(appointments, state);
-   
-    console.log("updated appointments:", appointments);
-    console.log("updated days:", newDays);
     return axios.put(`/api/appointments/${id}`, { interview })
       .then(() => {
         setState(prevState => ({ ...prevState, days: newDays, appointments })); //updating state with the new appointments objects
-        console.log("*****", state);
-      })
-      
-  }
+      });
+  };
 
 
   function cancelInterview(id) {
@@ -109,8 +84,8 @@ export function useApplicationData() {
       .then(() => {
         setState(prevState => ({ ...prevState, days: newDays, appointments }));
       });
-  }
+  };
 
   return { state, setDay, bookInterview, cancelInterview };
 
-}
+};
