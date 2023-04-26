@@ -44,7 +44,7 @@ export default function Appointment(props) {
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(err => {
-        console.log("err", err.message)
+        // console.log("err", err.message)
         transition(ERROR_DELETE, true)}
     );
   }
@@ -79,8 +79,8 @@ export default function Appointment(props) {
         />
       )}
       {mode === SAVING && <Status message={"SAVING"} />}
-      {mode === ERROR_SAVE && <Error message={"Error Save"} onClose={back}/>}
-      {mode === ERROR_DELETE && <Error message={"Error Deleting"} onClose={back}/>}
+      {mode === ERROR_SAVE && <Error message={"Error Saving Appointment"} onClose={back}/>}
+      {mode === ERROR_DELETE && <Error message={"Error Deleting Appointment"} onClose={back}/>}
       {mode === DELETING && <Status message={"DELETING"} />}
       {mode === CONFIRM && <Confirm message={"Delete?"}
         onCancel={back}
