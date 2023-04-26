@@ -90,9 +90,7 @@ export function useApplicationData() {
         setState(prevState => ({ ...prevState, days: newDays, appointments })); //updating state with the new appointments objects
         console.log("*****", state);
       })
-      .catch(error => {
-        console.log("error updating appointment:", error);
-      });
+      
   }
 
 
