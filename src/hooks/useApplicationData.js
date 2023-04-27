@@ -26,10 +26,7 @@ export function useApplicationData() {
   function getSpots(appointments, state) {
     //iterate over the days in the state
     //return the day
-    const day = state.days.find((day) => {
-      if (day.name === state.day)
-        return day;
-    });
+    const day = state.days.find((day) => day.name === state.day);
     //filtering through the appointments ids that came back from find.
     //because state object hasn't been updated yet, 
     //need to use the new apointments object created in bookInterview and canInterview
